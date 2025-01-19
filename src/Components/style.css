@@ -1,0 +1,23 @@
+ul.custom-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li.costom-list {
+    float: left;
+}
+
+li.costom-list a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    text-decoration: none;
+}
+
+li.costom-list a:hover {
+    background-color: #111;
+}
