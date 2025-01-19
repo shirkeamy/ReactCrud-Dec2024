@@ -2,6 +2,54 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Issues and its resolution
+
+Once we create an application usign `create-react-app` using template of `typescript` it gives us error as below 
+
+![alt text](./public/image.png)
+
+To resolve this issue we have to do some steps like
+1. Add `tsconfig.json` file with below code
+    ```
+    {
+        "compilerOptions": {
+            "target": "es5",
+            "lib": [
+                "dom",
+                "dom.iterable",
+                "esnext"
+            ],
+            "allowJs": true,
+            "skipLibCheck": true,
+            "esModuleInterop": true,
+            "allowSyntheticDefaultImports": true,
+            "strict": true,
+            "forceConsistentCasingInFileNames": true,
+            "noFallthroughCasesInSwitch": true,
+            "module": "commonjs",
+            "moduleResolution": "node",
+            "resolveJsonModule": true,
+            "isolatedModules": true,
+            "noEmit": true,
+            "jsx": "react-jsx"
+        },
+        "include": ["./src/**/*"],
+        "exclude": [
+            "node_modules"
+        ],
+        "typeAcquisition": {
+            "include": ["jest"]
+        }
+    }
+2. Install `web-vitals` with version `^3.4.0`
+    ```
+    npm install web-vitals@3.4.0
+3. Need to install some dependancies
+    ```
+    npm install --save-dev @types/react
+    npm install --save-dev @types/react-dom
+4. Remove test file for now
+
 ## Available Scripts
 
 In the project directory, you can run:
