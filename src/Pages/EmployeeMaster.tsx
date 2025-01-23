@@ -42,7 +42,7 @@ const EmployeeMaster: React.FC = () => {
             
             {
                 isEditMode ?
-                <EmployeeEdit editData={employeeData} /> :
+                <EmployeeEdit editData={employeeData} setIsEditMode={setIsEditMode} /> :
                 <EmployeeList setIsEditMode={setIsEditMode} setEmployeeId={setEmployeeId} />
             }
             

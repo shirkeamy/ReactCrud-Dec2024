@@ -11,6 +11,7 @@ const EmployeeList: React.FC<IEmployeeListProps> = (props: IEmployeeListProps) =
 
     const { setIsEditMode, setEmployeeId }: IEmployeeListProps = props;
     const [employeeList, setEmployeeList] = useState<IEmployees[]>([]);
+    const [isDeleted, setIsDelete] = useState<boolean>(false);
 
     function handleAddClick(){
         setIsEditMode(true);
@@ -24,7 +25,8 @@ const EmployeeList: React.FC<IEmployeeListProps> = (props: IEmployeeListProps) =
             }).catch(() => {
                 setEmployeeList([]);
             })
-    }, []);
+            setIsDelete(false);
+    }, [isDeleted]);
 
     function handleOnEditClick(employeeId: number){
         setIsEditMode(true);
@@ -36,7 +38,8 @@ const EmployeeList: React.FC<IEmployeeListProps> = (props: IEmployeeListProps) =
             .then((data)=>{
                 console.log("data list",data)
                 if(data>0){
-                    alert("Record Deleted")
+                    alert("Record Deleted");
+                    setIsDelete(true);
                 }else{
                     alert("Record Not Deleted")
                 }

@@ -4,10 +4,11 @@ import { InsertEmployee, UpdateEmployee } from "../../Utils/EmployeeServices";
 
 interface IEmployeeEditProps {
     editData: IEmployees;
+    setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) => {
-    const { editData }: IEmployeeEditProps = props;
+    const { editData, setIsEditMode }: IEmployeeEditProps = props;
     const [employeeData, setEmployeeData] = useState<IEmployees>(editData);
 
     useEffect(() => {
@@ -28,6 +29,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                 .then((data)=>{
                     if(data !== 0) {
                         alert("Record Update");
+                        setIsEditMode(false);
                     }else {
                         alert("Record Not Update");
                     }
@@ -37,6 +39,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                 .then((data)=>{
                     if(data !== 0) {
                         alert("Record Saved");
+                        setIsEditMode(false);
                     }else {
                         alert("Record Not Saved");
                     }
