@@ -70,7 +70,7 @@ const EmployeeList: React.FC<IEmployeeListProps> = (props: IEmployeeListProps) =
                         {
                             employeeList.map((employee: IEmployees) => {
                                 return (
-                                    <tr key={`emp-list-${employee.employeeId}`}>
+                                    <tr>
                                         <td>{employee.employeeId}</td>
                                         <td>{employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName}</td>
                                         <td>{employee.address}</td>
