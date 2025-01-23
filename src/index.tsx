@@ -12,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Navbar />
-    <App />
+    <div className="container-fluid">
+      <App />
+    </div>
   </React.StrictMode>
 );
 

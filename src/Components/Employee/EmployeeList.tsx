@@ -53,7 +53,7 @@ const EmployeeList: React.FC<IEmployeeListProps> = (props: IEmployeeListProps) =
     
     return (
         <>
-            <div className="container">
+            <div>
                 <h2>Employee List</h2>
                 <hr />
                 <input type="button" value="Add Employee" className="btn btn-primary" 
