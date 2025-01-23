@@ -71,9 +71,9 @@ const EmployeeList: React.FC<IEmployeeListProps> = (props: IEmployeeListProps) =
                     </thead>
                     <tbody>
                         {
-                            employeeList.map((employee: IEmployees) => {
+                            employeeList.map((employee: IEmployees, index: number) => {
                                 return (
-                                    <tr>
+                                    <tr key={`employee-data-row-${index}`}>
                                         <td>{employee.employeeId}</td>
                                         <td>{employee.firstName + ' ' + employee.middleName + ' ' + employee.lastName}</td>
                                         <td>{employee.address}</td>
