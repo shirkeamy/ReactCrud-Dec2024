@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { IEmployees } from "../../Utils/Interfaces";
 import { InsertEmployee, UpdateEmployee } from "../../Utils/EmployeeServices";
+import InputWrapper from "../FormComponents/InputWrapper";
+import { InputType } from "../../Utils/Enum";
+import CheckboxWrapper from "../FormComponents/CheckboxWrapper";
+import DropdownWrapper from "../FormComponents/DropdownWrapper";
 
 interface IEmployeeEditProps {
     editData: IEmployees;
@@ -11,39 +15,71 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
     const { editData, setIsEditMode }: IEmployeeEditProps = props;
     const [employeeData, setEmployeeData] = useState<IEmployees>(editData);
 
+    const [error, setError] = useState<{ [key: string]: string }>({})
+
     useEffect(() => {
         setEmployeeData(editData);
     }, [editData])
 
+    const validateData = () => {
+        const newError: { [key: string]: string } = {};
+
+        if (employeeData.firstName == "" || employeeData.firstName == null || employeeData.firstName == undefined) {
+            newError.firstName = "First name is required."
+        }
+        
+        if (!employeeData.lastName) {
+            newError.lastName = "Last name is required."
+        }
+        
+        if (employeeData.countryId === 0) {
+            newError.countryId = "Country is required."
+        }
+
+        if (employeeData.stateId === 0) {
+            newError.stateId = "State is required."
+        }
+
+        if (employeeData.cityId === 0) {
+            newError.cityId = "City is required."
+        }
+
+        setError(newError);
+        return Object.keys(newError).length === 0;
+    }
+
     const formatDate = (date: Date | undefined): string => {
-        if(!date) return "";
+        if (!date) return "";
         const year = date.getFullYear();
-        const month = String(date.getMonth()+1).padStart(2,"0");
-        const day = String(date.getDate()).padStart(2,"0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
     }
 
-    const handelOnSaveClick = () => {
-        if(employeeData.employeeId > 0) {
-            UpdateEmployee(employeeData.employeeId, employeeData)
-                .then((data)=>{
-                    if(data !== 0) {
-                        alert("Record Update");
-                        setIsEditMode(false);
-                    }else {
-                        alert("Record Not Update");
-                    }
-                })
-        }else {
-            InsertEmployee(employeeData)
-                .then((data)=>{
-                    if(data !== 0) {
-                        alert("Record Saved");
-                        setIsEditMode(false);
-                    }else {
-                        alert("Record Not Saved");
-                    }
-            })
+    const handelOnSaveClick = (e: FormEvent) => {
+        e.preventDefault();
+        if (validateData()) {
+            if (employeeData.employeeId > 0) {
+                UpdateEmployee(employeeData.employeeId, employeeData)
+                    .then((data) => {
+                        if (data !== 0) {
+                            alert("Record Update");
+                            setIsEditMode(false);
+                        } else {
+                            alert("Record Not Update");
+                        }
+                    })
+            } else {
+                InsertEmployee(employeeData)
+                    .then((data) => {
+                        if (data !== 0) {
+                            alert("Record Saved");
+                            setIsEditMode(false);
+                        } else {
+                            alert("Record Not Saved");
+                        }
+                    })
+            }
         }
     }
 
@@ -55,31 +91,46 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
             <form action="">
                 <div className="row">
                     <div className="col-4">
-                        <label htmlFor="">Employee Id</label>
-                        <span className="form-control">{editData.employeeId}</span>
+                        <InputWrapper
+                            title={"Employee Id"}
+                            type={InputType.Text}
+                            name={""}
+                            id={"employeeId"}
+                            value={`${editData.employeeId}`}
+                            isDisabled={true}
+                        />
+
                     </div>
                 </div>
                 <hr />
                 <div className="row">
                     <div className="col-4">
-                        <label htmlFor="">First Name</label>
-                        <input type="text" name="" id="" className="form-control"
-                            value={employeeData.firstName}
+                        <InputWrapper
+                            title={"First Name"}
+                            type={InputType.Text}
+                            name={""}
+                            id={"firstName"}
+                            value={`${employeeData.firstName}`}
                             onChange={(e) => {
-                                const { value } = e.target;
+                                const { value, id } = e.target;
                                 setEmployeeData(rest => (
                                     {
                                         ...rest,
                                         firstName: value
                                     }
                                 ))
+                                setError({...error, [id]: ""})
                             }}
+                            validationText={error.firstName}
                         />
                     </div>
                     <div className="col-4">
-                        <label htmlFor="">Middle Name</label>
-                        <input type="text" name="" id="" className="form-control"
-                            value={employeeData.middleName}
+                        <InputWrapper
+                            title={"Middle Name"}
+                            type={InputType.Text}
+                            name={""}
+                            id={"middleName"}
+                            value={`${employeeData.middleName}`}
                             onChange={(e) => {
                                 const { value } = e.target;
                                 setEmployeeData(rest => (
@@ -92,26 +143,34 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                         />
                     </div>
                     <div className="col-4">
-                        <label htmlFor="">Last Name</label>
-                        <input type="text" name="" id="" className="form-control"
-                            value={employeeData.lastName}
+                        <InputWrapper
+                            title={"Last Name"}
+                            type={InputType.Text}
+                            name={""}
+                            id={"lastName"}
+                            value={`${employeeData.lastName}`}
                             onChange={(e) => {
-                                const { value } = e.target;
+                                const { value, id } = e.target;
                                 setEmployeeData(rest => (
                                     {
                                         ...rest,
                                         lastName: value
                                     }
                                 ))
+                                setError({...error, [id]: ""})
                             }}
+                            validationText={error.lastName}
                         />
                     </div>
                 </div>
                 <hr />
                 <div className="row">
                     <div className="col-4">
-                        <label htmlFor="">Date OF Birth</label>
-                        <input type="date" name="" id="" className="form-control"
+                        <InputWrapper
+                            title={"Date of birth"}
+                            type={InputType.Date}
+                            name={""}
+                            id={"dateOfBirth"}
                             value={formatDate(new Date(employeeData.dateOfBirth))}
                             onChange={(e) => {
                                 const { value } = e.target;
@@ -126,40 +185,45 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                     </div>
                     <div className="col-4">
                         <label htmlFor="">Status</label>
-                        <div className="form-check">
-                            <input type="radio" name="status" id=""
-                                className="form-check-input"
-                                checked={employeeData.isActive == true}
-                                onChange={(e) => {
-                                    setEmployeeData(rest => (
-                                        {
-                                            ...rest,
-                                            isActive: true
-                                        }
-                                    ))
-                                }}
-                            />
-                            <label htmlFor="status" className="form-check-label">Active</label>
-                        </div>
-                        <div className="form-check">
-                            <input type="radio" name="status" id=""
-                                className="form-check-input"
-                                checked={employeeData.isActive == false}
-                                onChange={(e) => {
-                                    setEmployeeData(rest => (
-                                        {
-                                            ...rest,
-                                            isActive: false
-                                        }
-                                    ))
-                                }}
-                            />
-                            <label htmlFor="status" className="form-check-label">In Active</label>
-                        </div>
+
+                        <CheckboxWrapper
+                            type={"radio"}
+                            name={"status"}
+                            id={"active"}
+                            isChecked={employeeData.isActive == true}
+                            label={"Active"}
+                            onChange={(e) => {
+                                setEmployeeData(rest => (
+                                    {
+                                        ...rest,
+                                        isActive: true
+                                    }
+                                ))
+                            }}
+                        />
+
+                        <CheckboxWrapper
+                            type={"radio"}
+                            name={"status"}
+                            id={"inActive"}
+                            isChecked={employeeData.isActive == false}
+                            label={"In Active"}
+                            onChange={(e) => {
+                                setEmployeeData(rest => (
+                                    {
+                                        ...rest,
+                                        isActive: false
+                                    }
+                                ))
+                            }}
+                        />
                     </div>
                     <div className="col-4">
-                        <label htmlFor="">Email Id</label>
-                        <input type="email" name="" id="" className="form-control"
+                        <InputWrapper
+                            title={"Email Id"}
+                            type={InputType.Text}
+                            name={""}
+                            id={"emailId"}
                             value={employeeData.emailId}
                             onChange={(e) => {
                                 const { value } = e.target;
@@ -176,62 +240,61 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                 <hr />
                 <div className="row">
                     <div className="col-4">
-                        <label htmlFor="">Coutry</label>
-                        <select name="" id="" className="form-control"
-                            value={employeeData.countryId}
+                        <DropdownWrapper
+                            id={"countryId"}
+                            label={"Coutry"}
+                            selectedValue={`${employeeData.countryId}`}
+                            optionData={[{ text: "India", value: "1" }, { text: "UK", value: "2" }]}
                             onChange={(e) => {
-                                const { value } = e.target;
+                                const { value, id } = e.target;
                                 setEmployeeData(rest => (
                                     {
                                         ...rest,
                                         countryId: parseInt(value)
                                     }
                                 ))
+                                setError({...error, [id]: ""});
                             }}
-                        >
-                            <option value="0">Please Select</option>
-                            <option value="1">India</option>
-                            <option value="2">UK</option>
-                            <option value="3">US</option>
-                        </select>
+                            validationText={error.countryId}
+                        />
                     </div>
                     <div className="col-4">
-                        <label htmlFor="">State</label>
-                        <select name="" id="" className="form-control"
-                            value={employeeData.stateId}
+                        <DropdownWrapper
+                            id={"stateId"}
+                            label={"State"}
+                            selectedValue={`${employeeData.stateId}`}
+                            optionData={[{ text: "Maharashtra", value: "1" }, { text: "Delhi", value: "2" }]}
                             onChange={(e) => {
-                                const { value } = e.target;
+                                const { value, id } = e.target;
                                 setEmployeeData(rest => (
                                     {
                                         ...rest,
                                         stateId: parseInt(value)
                                     }
                                 ))
+                                setError({...error, [id]: ""});
                             }}
-                        >
-                            <option value="0">Please Select</option>
-                            <option value="1">Maharashtra</option>
-                            <option value="2">Delhi</option>
-                        </select>
+                            validationText={error.stateId}
+                        />
                     </div>
                     <div className="col-4">
-                        <label htmlFor="">City</label>
-                        <select name="" id="" className="form-control"
-                            value={employeeData.cityId}
+                        <DropdownWrapper
+                            id={"cityId"}
+                            label={"City"}
+                            selectedValue={`${employeeData.cityId}`}
+                            optionData={[{ text: "Pune", value: "1" }, { text: "Mumbai", value: "2" }]}
                             onChange={(e) => {
-                                const { value } = e.target;
+                                const { value, id } = e.target;
                                 setEmployeeData(rest => (
                                     {
                                         ...rest,
                                         cityId: parseInt(value)
                                     }
                                 ))
+                                setError({...error, [id]: ""});
                             }}
-                        >
-                            <option value="0">Please Select</option>
-                            <option value="1">Pune</option>
-                            <option value="2">Mumbai</option>
-                        </select>
+                            validationText={error.cityId}
+                        />
                     </div>
                 </div>
                 <hr />
