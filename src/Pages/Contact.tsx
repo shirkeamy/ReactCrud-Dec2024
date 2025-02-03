@@ -6,13 +6,7 @@ const Contact: React.FC = () => {
         <>
             <h1>Contact</h1>
             <label htmlFor="txtName">Name</label>
-            <input
-                type="tel"
-                name=""
-                id="txtName"
-                className=""
-                onChange={()=>{}}
-            />
+            <input type="tel" name="" id="txtName" className="" onChange={() => { }} />
 
             <InputWrapper labelText={"Email"} type={"text"} id={"txtEmail"} />
             <br />
