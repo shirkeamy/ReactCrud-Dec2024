@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { getAllEmployees } from "../Utils/EmployeesServices";
 import { IEmployees } from "../Utils/Interfaces";
+import "./style.css";
 
 const Home: React.FC = () => {
 
@@ -16,7 +17,7 @@ const Home: React.FC = () => {
     
     return (
         <>
-            <h1>Home</h1>
+            <h1 className="home-heading-1">Home</h1>
         </>
     )
 }
