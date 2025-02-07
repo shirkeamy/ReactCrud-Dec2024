@@ -1,10 +1,11 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { IEmployees } from "../../Utils/Interfaces";
+import { IContries, IEmployees } from "../../Utils/Interfaces";
 import { InsertEmployee, UpdateEmployee } from "../../Utils/EmployeeServices";
 import InputWrapper from "../FormComponents/InputWrapper";
 import { InputType } from "../../Utils/Enum";
 import CheckboxWrapper from "../FormComponents/CheckboxWrapper";
 import DropdownWrapper from "../FormComponents/DropdownWrapper";
+import { getContries } from "../../Utils/MasterDataServices";
 
 interface IEmployeeEditProps {
     editData: IEmployees;
@@ -14,11 +15,23 @@ interface IEmployeeEditProps {
 const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) => {
     const { editData, setIsEditMode }: IEmployeeEditProps = props;
     const [employeeData, setEmployeeData] = useState<IEmployees>(editData);
+    const [contries, setContries] = useState<IContries[]>([]);
 
     const [error, setError] = useState<{ [key: string]: string }>({})
 
     useEffect(() => {
         setEmployeeData(editData);
+
+        getContries()
+            .then((result: IContries[]) => {
+                console.log(result);
+                setContries(result);
+            })
+            .catch((err: Error) => {
+                console.log(err);
+                setContries([]);
+            })
+
     }, [editData])
 
     const validateData = () => {
@@ -27,11 +40,11 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
         if (employeeData.firstName == "" || employeeData.firstName == null || employeeData.firstName == undefined) {
             newError.firstName = "First name is required."
         }
-        
+
         if (!employeeData.lastName) {
             newError.lastName = "Last name is required."
         }
-        
+
         if (employeeData.countryId === 0) {
             newError.countryId = "Country is required."
         }
@@ -119,7 +132,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                                         firstName: value
                                     }
                                 ))
-                                setError({...error, [id]: ""})
+                                setError({ ...error, [id]: "" })
                             }}
                             validationText={error.firstName}
                         />
@@ -157,7 +170,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                                         lastName: value
                                     }
                                 ))
-                                setError({...error, [id]: ""})
+                                setError({ ...error, [id]: "" })
                             }}
                             validationText={error.lastName}
                         />
@@ -244,7 +257,12 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                             id={"countryId"}
                             label={"Coutry"}
                             selectedValue={`${employeeData.countryId}`}
-                            optionData={[{ text: "India", value: "1" }, { text: "UK", value: "2" }]}
+                            optionData={
+                                contries.map((contry: IContries)=>({
+                                    value: contry.countryId.toString(),
+                                    text: contry.countryName
+                                }))
+                            }
                             onChange={(e) => {
                                 const { value, id } = e.target;
                                 setEmployeeData(rest => (
@@ -253,7 +271,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                                         countryId: parseInt(value)
                                     }
                                 ))
-                                setError({...error, [id]: ""});
+                                setError({ ...error, [id]: "" });
                             }}
                             validationText={error.countryId}
                         />
@@ -272,7 +290,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                                         stateId: parseInt(value)
                                     }
                                 ))
-                                setError({...error, [id]: ""});
+                                setError({ ...error, [id]: "" });
                             }}
                             validationText={error.stateId}
                         />
@@ -291,7 +309,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                                         cityId: parseInt(value)
                                     }
                                 ))
-                                setError({...error, [id]: ""});
+                                setError({ ...error, [id]: "" });
                             }}
                             validationText={error.cityId}
                         />
