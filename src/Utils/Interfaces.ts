@@ -39,3 +39,8 @@ export interface IStates {
     stateId: number;
     stateName: string;
 }
+
+export interface ICities {
+    cityId: number;
+    cityName: string;
+}
