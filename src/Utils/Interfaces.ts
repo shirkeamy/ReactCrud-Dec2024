@@ -29,3 +29,8 @@ export interface IDropdownData {
     value: string;
     text: string;
 }
+
+export interface IContries {
+    countryId: number;
+    countryName: string;
+}
