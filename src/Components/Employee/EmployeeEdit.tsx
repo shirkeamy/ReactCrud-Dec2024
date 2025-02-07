@@ -304,9 +304,9 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                             label={"State"}
                             selectedValue={`${employeeData.stateId}`}
                             optionData={
-                                states.map((contry: IStates)=>({
-                                    value: contry.stateId.toString(),
-                                    text: contry.stateName
+                                states.map((state: IStates)=>({
+                                    value: state.stateId.toString(),
+                                    text: state.stateName
                                 }))
                             }
                             onChange={(e) => {
