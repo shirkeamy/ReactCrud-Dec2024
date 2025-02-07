@@ -1,11 +1,11 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { IContries, IEmployees, IStates } from "../../Utils/Interfaces";
+import { ICities, IContries, IEmployees, IStates } from "../../Utils/Interfaces";
 import { InsertEmployee, UpdateEmployee } from "../../Utils/EmployeeServices";
 import InputWrapper from "../FormComponents/InputWrapper";
 import { InputType } from "../../Utils/Enum";
 import CheckboxWrapper from "../FormComponents/CheckboxWrapper";
 import DropdownWrapper from "../FormComponents/DropdownWrapper";
-import { getContries, getStates } from "../../Utils/MasterDataServices";
+import { getCities, getContries, getStates } from "../../Utils/MasterDataServices";
 
 interface IEmployeeEditProps {
     editData: IEmployees;
@@ -17,6 +17,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
     const [employeeData, setEmployeeData] = useState<IEmployees>(editData);
     const [contries, setContries] = useState<IContries[]>([]);
     const [states, setStates] = useState<IStates[]>([]);
+    const [cities, setCities] = useState<ICities[]>([]);
 
     const [error, setError] = useState<{ [key: string]: string }>({})
 
@@ -41,6 +42,16 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
             .catch((err: Error) => {
                 console.log(err);
                 setStates([]);
+            })
+
+        getCities()
+            .then((result: ICities[]) => {
+                console.log(result);
+                setCities(result);
+            })
+            .catch((err: Error) => {
+                console.log(err);
+                setCities([]);
             })
 
     }, [editData])
@@ -316,7 +327,12 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                             id={"cityId"}
                             label={"City"}
                             selectedValue={`${employeeData.cityId}`}
-                            optionData={[{ text: "Pune", value: "1" }, { text: "Mumbai", value: "2" }]}
+                            optionData={
+                                cities.map((city: ICities)=>({
+                                    value: city.cityId.toString(),
+                                    text: city.cityName
+                                }))
+                            }
                             onChange={(e) => {
                                 const { value, id } = e.target;
                                 setEmployeeData(rest => (
