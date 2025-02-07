@@ -34,3 +34,8 @@ export interface IContries {
     countryId: number;
     countryName: string;
 }
+
+export interface IStates {
+    stateId: number;
+    stateName: string;
+}
