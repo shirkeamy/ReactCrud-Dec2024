@@ -1,11 +1,11 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { IContries, IEmployees } from "../../Utils/Interfaces";
+import { IContries, IEmployees, IStates } from "../../Utils/Interfaces";
 import { InsertEmployee, UpdateEmployee } from "../../Utils/EmployeeServices";
 import InputWrapper from "../FormComponents/InputWrapper";
 import { InputType } from "../../Utils/Enum";
 import CheckboxWrapper from "../FormComponents/CheckboxWrapper";
 import DropdownWrapper from "../FormComponents/DropdownWrapper";
-import { getContries } from "../../Utils/MasterDataServices";
+import { getContries, getStates } from "../../Utils/MasterDataServices";
 
 interface IEmployeeEditProps {
     editData: IEmployees;
@@ -16,6 +16,7 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
     const { editData, setIsEditMode }: IEmployeeEditProps = props;
     const [employeeData, setEmployeeData] = useState<IEmployees>(editData);
     const [contries, setContries] = useState<IContries[]>([]);
+    const [states, setStates] = useState<IStates[]>([]);
 
     const [error, setError] = useState<{ [key: string]: string }>({})
 
@@ -30,6 +31,16 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
             .catch((err: Error) => {
                 console.log(err);
                 setContries([]);
+            })
+
+        getStates()
+            .then((result: IStates[]) => {
+                console.log(result);
+                setStates(result);
+            })
+            .catch((err: Error) => {
+                console.log(err);
+                setStates([]);
             })
 
     }, [editData])
@@ -281,7 +292,12 @@ const EmployeeEdit: React.FC<IEmployeeEditProps> = (props: IEmployeeEditProps) =
                             id={"stateId"}
                             label={"State"}
                             selectedValue={`${employeeData.stateId}`}
-                            optionData={[{ text: "Maharashtra", value: "1" }, { text: "Delhi", value: "2" }]}
+                            optionData={
+                                states.map((contry: IStates)=>({
+                                    value: contry.stateId.toString(),
+                                    text: contry.stateName
+                                }))
+                            }
                             onChange={(e) => {
                                 const { value, id } = e.target;
                                 setEmployeeData(rest => (
