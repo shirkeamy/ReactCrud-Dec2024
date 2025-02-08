@@ -44,3 +44,16 @@ export interface ICities {
     cityId: number;
     cityName: string;
 }
+
+export interface ILoginBody {
+    emailId: string;
+    password: string;
+}
+
+export interface ILoginMaster {
+    loginId: number;
+    userName: string;
+    userPassword: string;
+    createdDate: Date;
+    createdBy: string;
+}
