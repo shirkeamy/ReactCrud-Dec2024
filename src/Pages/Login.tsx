@@ -3,6 +3,9 @@ import InputWrapper from "../Components/FormComponents/InputWrapper";
 import { InputType } from "../Utils/Enum";
 
 const Login: React.FC = () => {
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+
     return (
         <div className="container">
             <div className="row">
@@ -21,7 +24,10 @@ const Login: React.FC = () => {
                                     type={InputType.Text}
                                     name={""}
                                     id={"txtUserName"}
-                                    value={""}
+                                    value={userName}
+                                    onChange={(event)=>{
+                                        setUserName(event.target.value)
+                                    }}
                                 />
                             </div>
                         </div>
@@ -33,7 +39,10 @@ const Login: React.FC = () => {
                                     type={InputType.Password}
                                     name={""}
                                     id={"txtPassword"}
-                                    value={""}
+                                    value={password}
+                                    onChange={(event)=>{
+                                        setPassword(event.target.value)
+                                    }}
                                 />
                             </div>
                         </div>
