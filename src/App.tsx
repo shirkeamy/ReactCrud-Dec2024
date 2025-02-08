@@ -4,6 +4,7 @@ import Home from './Pages/Home';
 import Contact from './Pages/Contact';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import EmployeeMaster from './Pages/EmployeeMaster';
+import Login from './Pages/Login';
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Default Route */}
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<Login />} />
           
           <Route path='home' element={<Home />} />
           <Route path='about' element={<About />} />
